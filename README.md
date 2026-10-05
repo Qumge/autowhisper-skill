@@ -24,7 +24,7 @@ fits your brand, and goes out — not that it goes viral.)
 ### Claude Code: install as a plugin (skill + MCP in one step)
 
 ```
-/plugin marketplace add xnjiang/autowhisper-skill
+/plugin marketplace add Qumge/autowhisper-skill
 /plugin install autowhisper@autowhisper
 ```
 
@@ -34,7 +34,7 @@ Run `/mcp` → **autowhisper** → Authenticate and click **Approve** once.
 ### 1. Install skill
 
 ```bash
-npx skills add xnjiang/autowhisper-skill
+npx skills add Qumge/autowhisper-skill
 ```
 Or tell your AI: `Install skill from https://autowhisper.xyz/skill`
 

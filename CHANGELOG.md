@@ -2,9 +2,10 @@
 
 ## 0.7.1 — 2026-10-05
 
+- **Moved to the Qumge GitHub organization**: `Qumge/autowhisper-skill` (the old `xnjiang/…` URL redirects).
 - **Claude Code plugin.** The repo is now also a Claude Code plugin marketplace: `.claude-plugin/plugin.json`,
   `.claude-plugin/marketplace.json` and `.mcp.json` (the remote MCP at `https://autowhisper.xyz/mcp`).
-  `/plugin marketplace add xnjiang/autowhisper-skill` then `/plugin install autowhisper@autowhisper` installs the skill
+  `/plugin marketplace add Qumge/autowhisper-skill` then `/plugin install autowhisper@autowhisper` installs the skill
   and the MCP server together. `npx skills add` keeps working — `SKILL.md` stays at the root.
 - `scripts/bump-version.sh` now keeps the version in sync across three files (adds `.claude-plugin/plugin.json`).
 
