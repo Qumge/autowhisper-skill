@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "autowhisper": {
+      "type": "http",
+      "url": "https://autowhisper.xyz/mcp"
+    }
+  }
+}

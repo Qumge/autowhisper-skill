@@ -1,0 +1,23 @@
+{
+  "name": "autowhisper",
+  "owner": {
+    "name": "AutoWhisper",
+    "url": "https://autowhisper.xyz"
+  },
+  "description": "AutoWhisper's Claude Code plugin: the AutoWhisper skill plus the remote AutoWhisper MCP server.",
+  "plugins": [
+    {
+      "name": "autowhisper",
+      "source": "./",
+      "description": "Hand the whole content job to AutoWhisper's AI CMO from your agent: add a product, and it generates, approves, schedules and publishes on-brand UGC video, ad creatives and social posts — in every language, on every channel you've connected.",
+      "category": "marketing",
+      "tags": [
+        "marketing",
+        "ugc",
+        "video",
+        "ads",
+        "social"
+      ]
+    }
+  ]
+}

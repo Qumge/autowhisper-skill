@@ -21,6 +21,16 @@ fits your brand, and goes out — not that it goes viral.)
 > add the URL `https://autowhisper.xyz/mcp` as a connector (Claude Code: `claude mcp add --transport http autowhisper https://autowhisper.xyz/mcp`,
 > then `/mcp` → Authenticate). You'll click **Approve** once. Same CMO, same tools.
 
+### Claude Code: install as a plugin (skill + MCP in one step)
+
+```
+/plugin marketplace add xnjiang/autowhisper-skill
+/plugin install autowhisper@autowhisper
+```
+
+This installs the AutoWhisper skill and the remote MCP server (`https://autowhisper.xyz/mcp`) together.
+Run `/mcp` → **autowhisper** → Authenticate and click **Approve** once.
+
 ### 1. Install skill
 
 ```bash

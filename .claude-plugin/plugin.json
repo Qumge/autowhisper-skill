@@ -1,0 +1,27 @@
+{
+  "name": "autowhisper",
+  "displayName": "AutoWhisper",
+  "version": "0.7.1",
+  "description": "Hand the whole content job to AutoWhisper's AI CMO from your agent: add a product, and it generates, approves, schedules and publishes on-brand UGC video, ad creatives and social posts — in every language, on every channel you've connected.",
+  "author": {
+    "name": "AutoWhisper",
+    "url": "https://autowhisper.xyz"
+  },
+  "homepage": "https://autowhisper.xyz",
+  "repository": "https://github.com/xnjiang/autowhisper-skill",
+  "license": "MIT",
+  "keywords": [
+    "marketing",
+    "ugc",
+    "video",
+    "ads",
+    "social",
+    "scheduling",
+    "publishing",
+    "ecommerce"
+  ],
+  "documentationUrl": "https://autowhisper.xyz/en/skill",
+  "supportUrl": "https://autowhisper.xyz/en/skill",
+  "privacyPolicyUrl": "https://autowhisper.xyz/en/privacy",
+  "termsOfServiceUrl": "https://autowhisper.xyz/en/terms"
+}
