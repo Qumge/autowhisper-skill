@@ -36,6 +36,12 @@ Reads never create messages/jobs, retry providers, or spend/refund credits.
 Returns task_revision, task_state, items, previews/artifacts, delivery_complete,
 and next_actions. Only current native delivery evidence can count as complete.
 Applied requests, queued jobs, scripts and first frames do not prove delivery.
+The billing summary separates charged_credits, refunded_credits, net_credits,
+wallet debits, included entitlement and remaining_quote_credits; charge identities
+stay private and reused stages are counted once. prepared echoes the normalized
+public request and selected preset. For partial slides, artifacts contains current
+partial cards and next_actions supplies render with exact versions;
+previous_previews contains historical displayed content.
 
 Errors are `{error:{code,message,retryable,details},next_actions}`. For 409 refresh
 versions and verify the target before a new confirmed request. For enqueue_failed

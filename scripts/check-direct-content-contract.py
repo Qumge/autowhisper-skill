@@ -20,6 +20,8 @@ def check(root, contract):
     assert "Everything is done by sending the CMO" not in skill, "legacy all-content CMO routing returned"
     assert '"request_state":"accepted"' in reference, "submission receipt must say accepted"
     assert "applied does not mean delivered" in skill, "request acceptance must not imply delivery"
+    for field in ("charged_credits", "refunded_credits", "previous_previews"):
+        assert field in skill, f"missing truthful result guidance: {field}"
     for tool in capabilities["tools"]:
         assert tool["name"] in skill, f"missing tool {tool['name']}"
     for field in ("workspace_id", "request_id", "expected_task_revision", "expected_revisions", "preview_approval", "submission_unknown", "requires_planning"):

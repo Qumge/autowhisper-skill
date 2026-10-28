@@ -199,6 +199,11 @@ costs native generation credits and follows native confirmation/review.
 3. Query the request. applied does not mean delivered: it means the command
    reached the native task. Read task_state, items, previews and delivery_complete.
    A script, first frame, partial image set or old URL is not the final deliverable.
+   Read billing.charged_credits, refunded_credits and net_credits for actual native
+   usage; quote and remaining_quote_credits are estimates, not money already spent.
+   Wallet debits and included subscription usage are reported separately. Partial
+   artifacts contain only the current delivered cards; previous_previews are
+   historical. Follow the returned render action to finish a partial carousel.
 4. Use the server-returned `preview_approval` and exact `expected_task_revision`
    and `expected_revisions` when resuming/rendering a reviewed preview. Do not
    use feed approval to mean render-only: feed approval can publish.
