@@ -15,6 +15,15 @@ what your competitors are posting** before it writes a word.
 (Honest scope: posting ≠ traffic. AutoWhisper guarantees the content exists,
 fits your brand, and goes out — not that it goes viral.)
 
+## Explicit content requests
+
+Use context → direct create/update → native confirmation/review → task query.
+The external agent and dashboard CMO share native tasks and billing. CMO advice
+is optional for marketing decisions. The four new tools require workspace_id and
+stable request_id for writes; applied does not mean delivered. See SKILL.md and
+references/direct-content-examples.md. These changes are locally verified; the
+backend rollout flag, package release and production checks are still separate.
+
 ## Quick Start
 
 > **Using Claude.ai, ChatGPT, Claude Desktop, Claude Code or Cursor?** Skip the install and

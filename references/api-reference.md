@@ -2,6 +2,137 @@
 
 Base: `https://autowhisper.xyz`  ·  Auth: `Authorization: Bearer <api_token>`
 
+## Direct content capabilities
+
+All endpoints below require explicit `workspace_id`; none default to the current workspace.
+Schemas and format limits come from `GET /api/contract` → `content_capabilities`.
+The rollout flag and user allowlist control new writes. Unavailable capability does not authorize a CMO fallback.
+
+### GET /api/content/context
+Required: workspace_id, product_id. Read-only facts, existing brand requirements,
+material aliases/readiness, preset capabilities, active tasks and context_digest.
+This does not create a chat, analyze media or spend credits.
+
+### POST /api/content/tasks
+Required: workspace_id, request_id, product_id, items. Optional brief contains
+only public requirements. Each item has key, content_type and optional
+template_code, direction, format. Use the exact supported preset, count and shape.
+Returns `202 {"request_state":"accepted","request_id":"example_001","task_id":null,"next_poll_after_ms":3000}`.
+No model routing, preflight download or waiting happens in this HTTP request.
+
+### POST /api/content/tasks/:task_id/operations
+Required: workspace_id, request_id, operation, item_ids, expected_task_revision,
+expected_revisions. operation is revise/resume/render. revise takes an explicit
+patch; resume/render cannot change requirements. unit_selector identifies one
+image/card/frame/text unit. preview_approval must be the server-returned binding.
+This returns the same asynchronous request receipt as creation.
+
+### GET /api/content/requests/:request_id
+Read the original request after timeouts. States below distinguish preparation,
+confirmation and application. When a native task exists the response embeds task.
+Reads never create messages/jobs, retry providers, or spend/refund credits.
+
+### GET /api/content/tasks/:task_id
+Returns task_revision, task_state, items, previews/artifacts, delivery_complete,
+and next_actions. Only current native delivery evidence can count as complete.
+Applied requests, queued jobs, scripts and first frames do not prove delivery.
+
+Errors are `{error:{code,message,retryable,details},next_actions}`. For 409 refresh
+versions and verify the target before a new confirmed request. For enqueue_failed
+or timeout read the same request ID, then retry its identical payload if absent.
+For submission_unknown inspect the saved task; never issue a new paid submission
+blindly. requires_planning requires explaining unsupported requirements before
+optional CMO consultation. Native generation credits and refunds are unchanged;
+this path does not charge a CMO chat turn. It does not publish content.
+
+<!-- direct-content-contract -->
+```json
+{
+  "schema_version": 1,
+  "workspace_required": true,
+  "request_states": [
+    "accepted",
+    "preparing",
+    "confirmation_required",
+    "queued",
+    "applied",
+    "blocked",
+    "failed",
+    "canceled"
+  ],
+  "task_states": [
+    "draft",
+    "queued",
+    "running",
+    "waiting_review",
+    "blocked",
+    "failed",
+    "completed",
+    "paused",
+    "canceled",
+    "unknown"
+  ],
+  "error_codes": [
+    "invalid_request",
+    "workspace_not_found",
+    "target_not_found",
+    "stale_revision",
+    "conflicting_request",
+    "capability_unavailable",
+    "requires_planning",
+    "material_required",
+    "insufficient_balance",
+    "enqueue_failed",
+    "generation_failed",
+    "submission_unknown"
+  ],
+  "tools": [
+    {
+      "name": "autowhisper_context",
+      "method": "GET",
+      "path": "/api/content/context",
+      "required": [
+        "workspace_id",
+        "product_id"
+      ]
+    },
+    {
+      "name": "autowhisper_create_content",
+      "method": "POST",
+      "path": "/api/content/tasks",
+      "required": [
+        "workspace_id",
+        "request_id",
+        "product_id",
+        "items"
+      ]
+    },
+    {
+      "name": "autowhisper_update_task",
+      "method": "POST",
+      "path": "/api/content/tasks/:task_id/operations",
+      "required": [
+        "workspace_id",
+        "request_id",
+        "task_id",
+        "operation",
+        "item_ids",
+        "expected_task_revision",
+        "expected_revisions"
+      ]
+    },
+    {
+      "name": "autowhisper_task",
+      "method": "GET",
+      "path": "/api/content/requests/:request_id|/api/content/tasks/:task_id",
+      "required": [
+        "workspace_id"
+      ]
+    }
+  ]
+}
+```
+
 ## Fast read-only endpoints
 
 Use these for simple facts instead of `/api/cmo/message`; they are synchronous
@@ -95,6 +226,7 @@ by_channel, ad_spend_cents}`.
 
 ### POST /api/cmo/actions/:tool
 Run an explicit action without an LLM chat turn. Supported `:tool` values:
+- `select_content_menu` — select a native draft menu; no generation or charge. Explicit production requests use direct content capabilities above.
 `approve_feed_item`, `reject_feed_item`, `dismiss_feed_item`,
 `publish_content`, `regenerate_content`, `reschedule_post`, `retry_post`,
 `mark_as_published`, `boost_post`.

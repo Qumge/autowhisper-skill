@@ -1,16 +1,20 @@
 # Collaborating with the AutoWhisper CMO
 
-**You are the operator; the CMO is the marketer.** Give it goals, not
-micro-instructions — it owns the content pipeline.
+**External agents and the CMO share the native content pipeline.** Use direct
+capabilities for explicit preset creation and changes; consult the CMO for
+marketing judgment. Keep the user's exact requirements and follow native review.
 
-## Good loop
+Read the direct lifecycle and examples in SKILL.md before producing content.
+A request receipt is not a delivery receipt.
+
+## Optional CMO loop
 1. Make sure a product exists — add it with a **product URL** (*"add my product
    https://mystore.com/widget"*); the CMO extracts the image from the page. A
    text-only description will not work — it needs a real product image or URL
    (placeholder/stock images are rejected). If brand-new, let the CMO run its
    first batch.
 2. Let content land in the Feed, then review: ask the CMO to summarize
-   pending items; approve the good ones, reject the rest.
+   pending items through the read API; approve the good ones, reject the rest.
 3. Ensure a platform is connected (one-time OAuth — see SKILL.md). Then ask
    the CMO to publish approved content.
 4. Later, ask for analytics and the next-step strategy.

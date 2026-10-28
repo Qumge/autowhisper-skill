@@ -18,8 +18,9 @@ metadata:
 
 **Audience: AI Agent**
 
-You drive **AutoWhisper's CMO** — the same brain as the AutoWhisper web
-dashboard chat — over a small HTTP API.
+You call AutoWhisper's native content capabilities over HTTP or MCP.
+The dashboard CMO and external agents are peer callers of the same task,
+review, billing and delivery pipeline; CMO consultation is optional.
 
 **What you are selling the user is relief, not output.** They do not want
 "ad creatives"; they want to stop producing content, stop wrestling with
@@ -28,15 +29,14 @@ that whole job leaves their desk: it learns what they sell, then makes and
 ships content in every language, on every channel they've connected, every
 day.
 
-Two things make that promise credible. Say them — they are the reason the
-output is worth shipping, and nothing else in this space does both:
+Describe only the capabilities and evidence relevant to the current task:
 
 - **It doesn't look like an ad.** A hard ad dies in an organic feed. Every
   template, the soft CTA, the UGC realism work — all of it exists to make the
   content read as native, not as an advertisement.
-- **It has seen what their rivals are posting.** The CMO studies competitors'
-  live content before it writes. That is the mechanism behind "on-brand and
-  accurate" — without it, the claim would be empty.
+- **Competitor research is available through CMO consultation.** Say that live
+  research occurred only when this task returns evidence of it. Direct preset
+  generation does not imply that a competitor analysis ran.
 
 **Be straight about reach: posting ≠ traffic.** Never imply that publishing
 alone brings views or followers. What AutoWhisper guarantees is that the
@@ -50,10 +50,10 @@ content exists, fits the brand, and goes out — not that it goes viral.
 |---|---|---|
 | `401` | bad/missing token | Re-run the device flow from *Setup* and write the new token to the credentials file. Do **not** tell the user to go copy a token by hand — that is the old path. |
 | `404` | unknown id, or a workspace this token cannot reach | Do not retry. Re-read the list endpoint to get a valid id. |
-| `410` | confirm bubble already resolved | Treat as done; do not re-confirm. |
+| `410` | confirm bubble already resolved | Read the saved request/task result; do not re-confirm or assume content is delivered. |
 | `422` | invalid params (blank message, bad status, wrong content id/type) | Do not retry as-is — fix the argument. Most often you passed a `feed_item` id where a `content` id was wanted (see *Two kinds of id* below). |
 | `429` | rate limited | Back off, then retry once. Never loop. |
-| `5xx` / timeout | upstream trouble | Retry once, then stop silently. |
+| `5xx` / timeout | response unknown | For direct content, query the original request_id first. For a CMO turn, query the original message_id; do not resend a separately charged turn. Explain that the work is incomplete if recovery cannot establish an outcome. |
 
 ### Two kinds of id (most common mistake)
 A feed row carries **two different ids** and they are not interchangeable:
@@ -165,15 +165,55 @@ workspace; to act in a different one, set `WS` to that workspace's `id` instead.
 
 ## Which channel: direct API or CMO chat?
 
-There are two ways in. Pick with one question: **does this need judgment?**
+**Explicit content → direct capabilities.** For a specified product and preset,
+read `autowhisper_context` (`GET /api/content/context`), then call
+`autowhisper_create_content` (`POST /api/content/tasks`). For changes, read
+`autowhisper_task`, then call `autowhisper_update_task`
+(`POST /api/content/tasks/:task_id/operations`). Every call requires an explicit
+`workspace_id`. Discover IDs using status/products first. Preserve the user's
+quantity, format and creative requirements; do not invent scenes or directions.
+When valid workspace/product IDs are already supplied, start with context.
+Omitted template_code uses the native recommended preset, echoed in preparation;
+an explicit template must be supported and cannot be substituted silently.
 
-- **No → direct API.** Synchronous, ~instant, spends no credits. Every *fact*
-  (counts, lists, feed, delivery queue, wallet, platforms) and every
-  *unambiguous operation* (approve/reject/dismiss, publish, reschedule, retry,
-  mark as published, field-level edits).
-- **Yes → `POST /api/cmo/message`.** Async, costs an LLM turn. Anything that
-  writes new content or chooses on the user's behalf: generating content, adding
-  a product, strategy, targeting advice, "what should I do next".
+**Facts → read API.** Counts, lists, feed, queue, wallet and platforms use the
+existing read endpoints. These reads do not spend a CMO turn.
+
+**Marketing judgment → optional CMO.** Use `POST /api/cmo/message` for strategy,
+targeting, ambiguous creative decisions or product creation. A supported explicit
+content request does not need a second CMO routing turn. Direct generation still
+costs native generation credits and follows native confirmation/review.
+
+### Direct content lifecycle
+
+1. Choose a stable `request_id` and submit exactly the user's request. Keep that
+   ID and identical payload for retries. The initial receipt is accepted, not
+   completed. `autowhisper_task` queries exactly one request_id or task_id.
+   Poll at next_poll_after_ms, up to 20 reads in one interaction. If still pending,
+   report its saved IDs and state so it can be checked later without resubmission.
+2. Follow server `next_actions` for `autowhisper_confirm`. Explain the quoted
+   cost and scope using the existing authorization. Do not synthesize permission
+   booleans or copy authorization from an older web conversation.
+   autowhisper_confirm is the existing confirmation tool documented below; it is
+   intentionally separate from the four-tool direct content contract.
+3. Query the request. applied does not mean delivered: it means the command
+   reached the native task. Read task_state, items, previews and delivery_complete.
+   A script, first frame, partial image set or old URL is not the final deliverable.
+4. Use the server-returned `preview_approval` and exact `expected_task_revision`
+   and `expected_revisions` when resuming/rendering a reviewed preview. Do not
+   use feed approval to mean render-only: feed approval can publish.
+5. On timeout, 503 or `submission_unknown`, query the original request_id before
+   retrying its identical POST. Never create a new ID to bypass an uncertain
+   submission. On 409, refresh context/task versions and check the intended target
+   before a new request and confirmation; never overwrite automatically.
+6. `requires_planning`: explain which explicit requirement the preset cannot
+   preserve and offer CMO consultation. `capability_unavailable`: report that this
+   direct capability is not enabled. Do not silently fall back to a paid CMO turn.
+   Missing materials or balance require the stated input/top-up before resubmission.
+
+See the three complete examples in `references/direct-content-examples.md`.
+The backend rollout flag must enable this user; local package changes alone do
+not establish production availability.
 
 Never use CMO chat to look something up — "how many products do I have?" is a
 `GET`, and routing it through chat costs the user seconds and credits for an
@@ -186,9 +226,9 @@ curl -s https://autowhisper.xyz/api/products/summary \
 
 Full endpoint list: `references/api-reference.md`.
 
-## The core loop: talk to the CMO
+## Optional CMO consultation
 
-Everything is done by sending the CMO a message and polling for its reply.
+For marketing judgment or product creation, send a CMO message and poll its reply.
 
 ### 1. Send a message
 ```bash
@@ -272,7 +312,7 @@ Plus: add/list/edit products, run the full CMO cycle, toggle daily auto-run.
 For read-only facts, use the fast API above. For a clear operational action
 (feed approval, reschedule, retry, direct field edit), prefer the direct API
 endpoints in `references/api-reference.md`; they are synchronous and avoid an
-LLM turn. Use CMO chat when the work needs judgment, planning, or generation.
+LLM turn. Use CMO chat when the work needs judgment or planning; use direct capabilities for explicit preset generation.
 
 ## Adding a product (important)
 To add a product, give the CMO a **product URL** — it extracts the product's

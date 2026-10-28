@@ -25,7 +25,12 @@ SKILL="SKILL.md"
 
 cd "$(dirname "$0")/.."
 
-CONTRACT="$(curl -fsS --max-time 10 "$URL" 2>/dev/null || true)"
+CONTRACT_FILE="${1:-${AUTOWHISPER_CONTRACT_FILE:-}}"
+if [ -n "$CONTRACT_FILE" ]; then
+  CONTRACT="$(cat "$CONTRACT_FILE")"
+else
+  CONTRACT="$(curl -fsS --max-time 10 "$URL" 2>/dev/null || true)"
+fi
 if [ -z "$CONTRACT" ]; then
   # ⚠️ 拉不到就【跳过并显式说出来】,绝不静默通过。一个连不上就默默变绿的检查,
   # 和没有这个检查是一回事,而且更糟:它看着像有防护。
@@ -136,6 +141,16 @@ grep -qi "only sees ONE workspace" "$SKILL" \
   || note "$SKILL 没有说明 CMO 只能看到当前工作区 —— agent 会以为它够得着别处的产品"
 
 if [ "$fail" = 0 ]; then
+  if [ -n "$CONTRACT_FILE" ]; then
+    python3 scripts/check-direct-content-contract.py "$CONTRACT_FILE"
+  elif printf '%s' "$CONTRACT" | python3 -c 'import json,sys; sys.exit(0 if "content_capabilities" in json.load(sys.stdin) else 1)'; then
+    temp_contract="$(mktemp)"
+    trap 'rm -f "$temp_contract"' EXIT
+    printf '%s' "$CONTRACT" > "$temp_contract"
+    python3 scripts/check-direct-content-contract.py "$temp_contract"
+  else
+    echo "⏭  Online contract has no content_capabilities; direct production compatibility is not verified"
+  fi
   echo "✅ 文档与服务端契约一致($(printf '%s' "$CONTRACT" | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])'))"
 else
   echo

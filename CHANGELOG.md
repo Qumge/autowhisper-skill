@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Prefer direct capabilities for explicit content requests, with stable retry IDs, native confirmation and accurate delivery states. Add offline contract and example replay checks; production compatibility remains unverified.
+
 ## 0.7.1 — 2026-10-05
 
 - **Moved to the Qumge GitHub organization**: `Qumge/autowhisper-skill` (the old `xnjiang/…` URL redirects).
