@@ -1,0 +1,3 @@
+# autowhisper-skill
+
+@AGENTS.md
