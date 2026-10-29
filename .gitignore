@@ -1,3 +1,6 @@
 .DS_Store
 credentials.json
 *.log
+
+# git worktrees
+.worktrees/
