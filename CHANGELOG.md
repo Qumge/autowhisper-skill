@@ -3,6 +3,12 @@
 ## Unreleased
 - Prefer direct capabilities for explicit content requests, with stable retry IDs, native confirmation and accurate delivery states. Add offline contract and example replay checks; production compatibility remains unverified.
 
+## 0.7.2 — 2026-11-02
+
+- English and Simplified Chinese introductions, installation and authorization guidance, practical examples, and links to start with a product on AutoWhisper.
+- Keep agent instructions grounded in actual capabilities and saved delivery states; remove unconditional automation/traffic promises. Preserve native confirmation, billing and retry contracts.
+- 新增中英文介绍、安装授权和使用示例；清楚区分预览、制作与发布，保留原生确认和计费规则。
+
 ## 0.7.1 — 2026-10-05
 
 - **Moved to the Qumge GitHub organization**: `Qumge/autowhisper-skill` (the old `xnjiang/…` URL redirects).
