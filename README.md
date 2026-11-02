@@ -1,86 +1,89 @@
 # AutoWhisper Skill
 
-**Audience: Human (project overview)**
+[English](README.md) · [简体中文](README.zh-CN.md)
 
-**Never make marketing content again.** Hand AutoWhisper's AI CMO one product
-and the whole job leaves your desk: it learns what you sell, watches what your
-rivals post, and makes content that doesn't look like an ad — in every
-language, on every channel you've connected, every day. Drive it in natural
-language from Claude Code, Cursor, n8n, or any MCP-capable agent.
+**Give your agent a product. Work together on its marketing.**
+AutoWhisper helps you turn product facts and materials into UGC videos, images and social posts. This Skill teaches your agent the same creative, preview, review and publishing workflow used in the AutoWhisper dashboard, with your existing account, tasks and credits.
 
-Two things make that promise credible: the content **doesn't read as an
-advertisement** (a hard ad dies in an organic feed), and the CMO **has seen
-what your competitors are posting** before it writes a word.
+[Connect your agent to AutoWhisper](https://autowhisper.xyz/en/skill?utm_source=github&utm_medium=readme&utm_campaign=agent_integrations&utm_content=skill_intro) · [MCP server](https://github.com/Qumge/autowhisper-mcp)
 
-(Honest scope: posting ≠ traffic. AutoWhisper guarantees the content exists,
-fits your brand, and goes out — not that it goes viral.)
+## What you can ask
 
-## Explicit content requests
+> “Add this product URL to my workspace and prepare a content proposal. Don’t render or publish yet.”
+>
+> “Make one UGC video for this product. Use its materials and show me the preview and cost.”
+>
+> “Revise this draft’s opening line. Keep the product and language unchanged.”
+>
+> “Show pending reviews, failed posts and the results for this workspace.”
 
-Use context → direct create/update → native confirmation/review → task query.
-The external agent and dashboard CMO share native tasks and billing. CMO advice
-is optional for marketing decisions. The four new tools require workspace_id and
-stable request_id for writes; applied does not mean delivered. See SKILL.md and
-references/direct-content-examples.md. These changes are locally verified; the
-backend rollout flag, package release and production checks are still separate.
+For supported explicit requests the agent uses direct native content tools; for facts it uses read endpoints; for marketing judgment it can consult the CMO. It does not need a CMO chat turn for every action.
 
-## Quick Start
+## Quick start
 
-> **Using Claude.ai, ChatGPT, Claude Desktop, Claude Code or Cursor?** Skip the install and
-> add the URL `https://autowhisper.xyz/mcp` as a connector (Claude Code: `claude mcp add --transport http autowhisper https://autowhisper.xyz/mcp`,
-> then `/mcp` → Authenticate). You'll click **Approve** once. Same CMO, same tools.
+### Claude Code: Skill + MCP together
 
-### Claude Code: install as a plugin (skill + MCP in one step)
-
-```
+```text
 /plugin marketplace add Qumge/autowhisper-skill
 /plugin install autowhisper@autowhisper
 ```
 
-This installs the AutoWhisper skill and the remote MCP server (`https://autowhisper.xyz/mcp`) together.
-Run `/mcp` → **autowhisper** → Authenticate and click **Approve** once.
+This adds the workflow instructions and the remote MCP connection. Open `/mcp`, select AutoWhisper and authenticate on the AutoWhisper approval page. You need an AutoWhisper account; no token needs to pass through chat.
 
-### 1. Install skill
+### Other skill-capable agents
 
 ```bash
 npx skills add Qumge/autowhisper-skill
 ```
-Or tell your AI: `Install skill from https://autowhisper.xyz/skill`
 
-### 2. Get your token
+The agent reads [SKILL.md](SKILL.md) and starts the existing device authorization flow when needed. Open the returned link and approve. The token is saved locally in `~/.config/autowhisper/credentials.json`, shared with the local MCP server. The HTTP examples require `curl` and `jq`.
 
-Sign up at https://autowhisper.xyz (new accounts get free credits), open
-**Settings → Connect your agent**, and copy your API token.
+Already use a compatible remote MCP client? Add `https://autowhisper.xyz/mcp` in that client’s connector settings. For a local stdio configuration, see [AutoWhisper MCP](https://github.com/Qumge/autowhisper-mcp). Installing both is optional: MCP provides tools, while the Skill provides workflow guidance.
 
-### 3. Configure token
+## The first useful result
+
+1. Connect your account and choose the workspace and product.
+2. Give a product URL or use existing product facts and materials.
+3. Ask for one creative. Review its script, images or video preview and cost.
+4. Continue rendering or publish only within the scope you authorize. Publishing requires a compatible connected account.
+5. Inspect saved task and delivery state, then check post results.
+
+Content availability depends on the server-returned capabilities and your account. An installed Skill is not proof that a gated capability is enabled. Connection authorization does not by itself authorize all future spending or publishing.
+
+## Before you start
+
+- Generation and CMO consultation can use AutoWhisper credits. Quotes, actual charges, refunds and included usage are separate; see [your wallet](https://autowhisper.xyz/en/wallet).
+- A request acknowledgment, script or first frame is not a finished video. Report completion only from saved task state and `delivery_complete`.
+- Approving a feed card can trigger paid rendering and publishing. Read the returned actions and confirmation; don’t treat approval as a bookmark.
+- An uncertain response must be recovered by its original request/message ID before retrying, avoiding duplicate work and charges.
+- Publishing does not guarantee traffic or sales. Competitor research is available through CMO consultation and is only claimed when that task returns source evidence.
+
+The Skill uses AutoWhisper’s existing service, not a separate content or billing system. Installing this open-source package is distinct from using hosted generation.
+
+## Documentation
+
+| Reader | Document |
+| --- | --- |
+| Agent workflow and authorization | [SKILL.md](SKILL.md) |
+| API endpoints, workspace scope and task contract | [API reference](references/api-reference.md) |
+| Complete direct-content examples | [Create, revise and render examples](references/direct-content-examples.md) |
+| Marketing consultation | [CMO playbook](references/cmo-playbook.md) |
+| MCP connection and tools | [AutoWhisper MCP](https://github.com/Qumge/autowhisper-mcp) |
+
+[Start with your product on AutoWhisper](https://autowhisper.xyz/en/skill?utm_source=github&utm_medium=readme&utm_campaign=agent_integrations&utm_content=skill_footer)
+
+## Maintainer checks
+
+From the repository root, using a locally exported Rails contract:
 
 ```bash
-mkdir -p ~/.config/autowhisper
-echo '{"api_token": "your_token_here"}' > ~/.config/autowhisper/credentials.json
+bash scripts/check-api-contract.sh /absolute/path/to/agent_content_contract.json
+bash scripts/test-direct-content-contract.sh /absolute/path/to/agent_content_contract.json
+python3 scripts/test-direct-content-examples.py /absolute/path/to/agent_content_contract.json
 ```
 
-### 4. One-time: connect a platform to publish
-
-Publishing needs a connected social account. Ask your AI to
-`connect my tiktok` (OAuth platforms return a link you click once; Chinese
-platforms connect with your handle). After that, your agent can publish on
-its own.
-
-### 5. Use it
-
-```
-"Add my product https://mystore.com/widget and start the CMO"
-"Generate a UGC video for my product"
-"Publish the approved content"
-"What did the CMO do — show me analytics"
-```
-
-## How it works
-
-Your agent talks to AutoWhisper's CMO (the same brain as the web dashboard
-chat) over a small HTTP API. See `SKILL.md` (for agents) and
-`references/api-reference.md` (endpoints).
+These validate documentation scope, request contracts and examples against a local stub; they do not generate content or publish posts. Live availability is a separate check.
 
 ## License
 
-MIT — see `LICENSE`.
+MIT — see [LICENSE](LICENSE). Hosted service usage follows AutoWhisper’s account terms and credits.

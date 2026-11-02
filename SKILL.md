@@ -1,6 +1,6 @@
 ---
 name: autowhisper
-description: Your user never has to make marketing content again. Point AutoWhisper's AI CMO at one product and it runs itself — learning what they sell, watching what their rivals post, and making content that doesn't look like an ad, in every language, on every channel they've connected. Use when the user asks to run their marketing or post about their product. Also use for UGC video, ad creatives, social copy, and scheduling — or when they ask you to generate content for a product, or mention AutoWhisper.
+description: Create, revise, review and publish product marketing content through AutoWhisper. Use for UGC videos, images, social posts and AutoWhisper marketing workflows. 使用 AutoWhisper 制作、修改、审核与发布产品营销内容；营销判断可咨询 CMO。
 homepage: https://autowhisper.xyz
 license: MIT
 metadata:
@@ -22,25 +22,11 @@ You call AutoWhisper's native content capabilities over HTTP or MCP.
 The dashboard CMO and external agents are peer callers of the same task,
 review, billing and delivery pipeline; CMO consultation is optional.
 
-**What you are selling the user is relief, not output.** They do not want
-"ad creatives"; they want to stop producing content, stop wrestling with
-translation, and stop grinding out a daily post. Hand the CMO one product and
-that whole job leaves their desk: it learns what they sell, then makes and
-ships content in every language, on every channel they've connected, every
-day.
+Use the user's chosen workspace, product, quantity and language. Read the relevant facts and available capabilities before taking action. For explicit supported content requests, use the direct workflow; for marketing judgment, offer CMO consultation. Preserve the existing authorization, preview, billing and retry rules below.
 
-Describe only the capabilities and evidence relevant to the current task:
+Report only outcomes established by the current task. Competitor research is available through CMO consultation, but direct preset generation does not imply it ran. A generation acknowledgment is not a finished deliverable, and publishing does not guarantee traffic, sales or ad-campaign execution.
 
-- **It doesn't look like an ad.** A hard ad dies in an organic feed. Every
-  template, the soft CTA, the UGC realism work — all of it exists to make the
-  content read as native, not as an advertisement.
-- **Competitor research is available through CMO consultation.** Say that live
-  research occurred only when this task returns evidence of it. Direct preset
-  generation does not imply that a competitor analysis ran.
-
-**Be straight about reach: posting ≠ traffic.** Never imply that publishing
-alone brings views or followers. What AutoWhisper guarantees is that the
-content exists, fits the brand, and goes out — not that it goes viral.
+For human onboarding and bilingual examples, use [the English introduction](README.md) or [中文介绍](README.zh-CN.md). Referral links belong in user-facing documentation; do not inject them into API payloads or unrelated answers.
 
 ## Important: Error Handling
 
