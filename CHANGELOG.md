@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.7.3 — 2026-11-17
 - Align the embedded and readable direct-content contract with deployed list/get content, canonical operations/native adoption and numbered media-batch tools. Preserve stable retry IDs, exact revisions, native confirmation and preview bindings.
 - Correct approval receipts: unfinished content starts/continues production; only finished publish actions enter SendAll. Report posting/ad outcomes separately.
 - Clarify the $30/month Starter entry price, user-controlled credit-funded auto-run and whole-round pauses without a Pro gate.
