@@ -54,9 +54,13 @@ Content availability depends on the server-returned capabilities and your accoun
 
 - Generation and CMO consultation can use AutoWhisper credits. Quotes, actual charges, refunds and included usage are separate; see [your wallet](https://autowhisper.xyz/en/wallet).
 - A request acknowledgment, script or first frame is not a finished video. Report completion only from saved task state and `delivery_complete`.
-- Approving a feed card can trigger paid rendering and publishing. Read the returned actions and confirmation; don’t treat approval as a bookmark.
+- Approval follows readiness: unfinished content starts/continues paid production; a finished publish action sends to the native posting/ad workflow. Read the receipt and separate post/ad outcomes; zero scheduled posts does not prove platforms are missing.
 - An uncertain response must be recovered by its original request/message ID before retrying, avoiding duplicate work and charges.
 - Publishing does not guarantee traffic or sales. Competitor research is available through CMO consultation and is only claimed when that task returns source evidence.
+
+Starter starts at **$30/month**. Optional daily auto-run follows your setting and available credits, with no Pro-tier gate. If credits cannot cover the full selected round, the entire round pauses. The entry price does not promise a full daily production workload; review quotes, included usage and your wallet.
+
+Once you authorize daily auto-run, new daily content for eligible products across your unarchived workspaces is automatically approved when ready, scheduled and published when due on connected social channels. Historical content and manual drafts keep their separate review/production/publishing steps. Daily ads are submitted separately to connected ad accounts with a request for paused handover. Only saved platform status or native feedback confirming the pause establishes that they are paused for you to start. If pausing fails or remains unconfirmed, the ad may be delivering or spending; show the native receipt and returned console/action link to check or pause it. Missing setup or platform rejection remains visible.
 
 The Skill uses AutoWhisper’s existing service, not a separate content or billing system. Installing this open-source package is distinct from using hosted generation.
 
@@ -66,7 +70,7 @@ The Skill uses AutoWhisper’s existing service, not a separate content or billi
 | --- | --- |
 | Agent workflow and authorization | [SKILL.md](SKILL.md) |
 | API endpoints, workspace scope and task contract | [API reference](references/api-reference.md) |
-| Complete direct-content examples | [Create, revise and render examples](references/direct-content-examples.md) |
+| Complete direct-content examples | [Find, create, revise and media-batch examples](references/direct-content-examples.md) |
 | Marketing consultation | [CMO playbook](references/cmo-playbook.md) |
 | MCP connection and tools | [AutoWhisper MCP](https://github.com/Qumge/autowhisper-mcp) |
 

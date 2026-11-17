@@ -1,7 +1,10 @@
 # Changelog
 
 ## Unreleased
-- Prefer direct capabilities for explicit content requests, with stable retry IDs, native confirmation and accurate delivery states. Add offline contract and example replay checks; production compatibility remains unverified.
+- Align the embedded and readable direct-content contract with deployed list/get content, canonical operations/native adoption and numbered media-batch tools. Preserve stable retry IDs, exact revisions, native confirmation and preview bindings.
+- Correct approval receipts: unfinished content starts/continues production; only finished publish actions enter SendAll. Report posting/ad outcomes separately.
+- Clarify the $30/month Starter entry price, user-controlled credit-funded auto-run and whole-round pauses without a Pro gate.
+- Extend offline guards to readable endpoint contracts, target branches, recovery guidance and executable curl examples. Contract compatibility is checked read-only; paid generation and publication are not exercised.
 
 ## 0.7.2 — 2026-11-02
 

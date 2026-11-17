@@ -14,7 +14,8 @@ A request receipt is not a delivery receipt.
    (placeholder/stock images are rejected). If brand-new, let the CMO run its
    first batch.
 2. Let content land in the Feed, then review: ask the CMO to summarize
-   pending items through the read API; approve the good ones, reject the rest.
+   pending items through the read API. Inspect readiness and the card's
+   primary_action before approving within the user's authorized scope.
 3. Ensure a platform is connected (one-time OAuth — see SKILL.md). Then ask
    the CMO to publish approved content.
 4. Later, ask for analytics and the next-step strategy.
@@ -31,20 +32,33 @@ is how the work markets AutoWhisper. Do not strip or hide it.
 ## Approvals & confirmations
 - The CMO defaults to human approval before publishing. You may approve on the
   user's behalf when they've told you to run autonomously.
-- **Approving IS publishing**, and for video drafts it is also the moment the
-  render is paid for. Check `scheduled` in the response: `0` means nothing went
-  out (no connected platform takes this content), and connecting one later will
-  not send it retroactively. Report that, don't report "approved" alone.
+- Approval follows native `primary_action`: unfinished content starts/continues
+  production and can spend credits; only a finished publish action enters SendAll.
+  Read `receipt_text` and current task state. `scheduled: 0` can mean production
+  started without publication; it does not prove platforms are missing. For
+  publication report post/ad counts and any ad_block_reason separately, and
+  verify delivery before saying the content is live.
+- Authorized daily auto-run is account-wide for eligible products in unarchived
+  workspaces. New daily content is approved when ready, scheduled and published
+  when due without another daily approval. Historical/manual drafts retain their
+  staged workflow. Daily ads are submitted separately with a request for paused
+  handover. Say paused only when saved `effective_status: paused` or native feedback
+  confirms it; local `status: active` only tracks budget allocation. If pausing
+  failed or is unconfirmed, explicitly warn that the ad may be delivering or
+  spending, and surface the native receipt plus returned console/action link to
+  check or pause it. Report setup/delivery blocks from saved state.
 - Destructive actions (reject/dismiss/delete/disconnect/archive) come back as
   `confirm_required`. Summarize the impact for the user before sending
   `decision=yes`.
 
 ## Language
 Relay the CMO's replies in the user's language. Keep your own prose short —
-the CMO's `content` is the substance.
+read the CMO's prose together with `cards` and `actions`. A prose reply alone
+can omit the actual plan or preview; see the polling instructions in SKILL.md.
 
 ## Don't
 - Don't surface raw API/tool errors (see SKILL.md).
-- Don't fine-edit fields via chat — send the user to the edit-page link.
+- For supported exact field edits use the direct field PATCH; for generative
+  changes use version-bound content operations. Use the editor when unsupported.
 - Don't promise a video is "posted" until publish succeeded and a platform is
   connected.
